@@ -1,0 +1,68 @@
+<html><head>
+<style>
+	*     { font-size: 30pt }
+	a     { text-decoration: none }
+	table { margin-top: 0 }
+	iframe { border: 0; width: 210px; height: 40px; }
+
+	img#spinner {
+		position:absolute; top:40px; left:90px; display:none;
+	}
+
+	._75dpi  { font-size: 10pt; }
+	._150dpi { font-size: 15pt; }
+	._300dpi { font-size: 30pt; }
+	._600dpi { font-size: 10pt; }
+</style>
+<title>Scanner</title>
+</head><body>
+
+<center>
+<a href="/data/scan.jpg" style="display:block; width:210px; height:297px; position:relative">
+	<img id="spinner" src="/ajax.gif" />
+	<img id="preview" width="210" height="297" src="/data/scan.jpg" style="border:solid 1px #ccc" />
+</a>
+
+<iframe id="info" src="/data/info.html"></iframe>
+
+<table><tr><td>
+<form method="POST" action="/cgi-bin/scan/75">
+	<input type="submit" value="75dpi" class="_75dpi">
+</form>
+
+</td><td>
+<form method="POST" action="/cgi-bin/scan/150">
+	<input type="submit" value="150dpi" class="_150dpi">
+</form>
+
+</td><td>
+<form method="POST" action="/cgi-bin/scan/300">
+	<input type="submit" value="300dpi" class="_300dpi">
+</form>
+
+</td><td>
+<form method="POST" action="/cgi-bin/scan/600">
+	<input type="submit" value="600dpi" class="_600dpi">
+</form>
+
+</td></tr></table>
+</center>
+
+</body>
+<script src="/jquery-1.6.1.min.js"></script>
+<script>
+	$('form').submit(function(){
+		$('#spinner').show();
+		var dpi = parseInt($('input',this).val());
+		$.ajax({
+			url: "/cgi-bin/scan/"+dpi,
+			complete: function(){
+				$('#preview').attr('src', '/data/scan.jpg?r=' + Math.random());
+				$('#info').attr('src', '/data/info.html?r=' + Math.random());
+				$('#spinner').hide();
+			}
+		});
+		return false;
+	});
+</script>
+</html>

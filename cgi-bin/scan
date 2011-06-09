@@ -1,0 +1,14 @@
+#!/bin/sh
+DPI=75
+case "$PATH_INFO" in
+	/150 ) DPI=150 ;;
+	/300 ) DPI=300 ;;
+	/600 ) DPI=600 ;;
+esac
+
+echo Content-Type: image/jpeg
+echo
+/usr/bin/scanimage --resolution $DPI | /usr/bin/cjpeg | tee data/scan.jpg
+
+echo "<style> * {font-size: 16px; margin:0; padding:0 } </style>" > data/info.html
+identify data/scan.jpg | awk '{print "<center><pre>" $3 "   " $7 "</pre></center>" }' >> data/info.html
